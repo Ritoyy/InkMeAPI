@@ -7,7 +7,7 @@ const router = express.Router();
 // POST - Add a new product with an image
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const { type, name, lvl1_price, lvl2_price, lvl3_price, color, text, text_color, category, id_design } = req.body;
+    const { name, lvl1_price, lvl2_price, lvl3_price, color, category, id_design } = req.body;
     const file = req.file ? req.file.filename : null; // Get uploaded file name
 
     const newProduct = new Product({

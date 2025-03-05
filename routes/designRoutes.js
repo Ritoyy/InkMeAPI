@@ -7,7 +7,7 @@ const router = express.Router();
 // POST - Create a new design
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const { user_id, name, description, isApproved } = req.body;
+    const { user_id, name, description, isApproved, text, text_color } = req.body;
     const file = req.file ? `/uploads/${req.file.filename}` : null; // Get the uploaded file name
 
     // Create a new design document

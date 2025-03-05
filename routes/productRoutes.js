@@ -13,6 +13,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     const newProduct = new Product({
       type,
       name,
+      description,
       lvl1_price,
       lvl2_price,
       lvl3_price,

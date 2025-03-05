@@ -14,7 +14,6 @@ router.post("/", upload.single("file"), async (req, res) => {
     const newDesign = new Design({
       user_id,
       name,
-      description,
       isApproved: isApproved || false, // Default to false if not provided
       file,
     });

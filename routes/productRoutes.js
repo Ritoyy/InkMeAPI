@@ -4,11 +4,10 @@ const upload = require("../middleware/upload");
 
 const router = express.Router();
 
-// POST - Add a new product with an image
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const { name, description, lvl1_price, lvl2_price, lvl3_price, color, category, id_design } = req.body;
-    const file = req.file ? req.file.filename : null; // Get uploaded file name
+    const { name, description, lvl1_price, lvl2_price, lvl3_price, color, category, id_design } = req.body; 
+    const file = req.file ? req.file.path : null; // Cloudinary URL
 
     const newProduct = new Product({
       name,
@@ -19,7 +18,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       color,
       category,
       id_design,
-      file, // Store file (image or PDF)
+      image: file, // Store Cloudinary URL
     });
 
     await newProduct.save();

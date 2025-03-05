@@ -4,23 +4,20 @@ const upload = require("../middleware/upload");
 
 const router = express.Router();
 
-// POST - Create a new design
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const { user_id, name, description, isApproved, text, text_color } = req.body;
-    const file = req.file ? `/uploads/${req.file.filename}` : null; // Get the uploaded file name
+    const { user_id, name, isApproved, text, text_color } = req.body;
+    const file = req.file ? req.file.path : null; // Cloudinary URL
 
-    // Create a new design document
     const newDesign = new Design({
       user_id,
       name,
-      isApproved: isApproved || false, // Default to false if not provided
-      file,
+      isApproved: isApproved || false,
+      file, // Store Cloudinary URL
       text,
-      text_color,
+      text_color
     });
 
-    // Save to database
     await newDesign.save();
     res.status(201).json(newDesign);
   } catch (error) {

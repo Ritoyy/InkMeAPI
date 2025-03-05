@@ -1,19 +1,25 @@
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+require("dotenv").config(); // Load environment variables
 const path = require("path");
 
-// Configure storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    if (file.mimetype === "application/pdf") {
-      cb(null, "uploads/pdfs/"); // Save PDFs in 'uploads/pdfs'
-    } else {
-      cb(null, "uploads/products/"); // Save images in 'uploads/products'
-    }
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Configure storage for Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "uploads", // Cloudinary folder name
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
+
 
 // File filter for images & PDFs
 const fileFilter = (req, file, cb) => {

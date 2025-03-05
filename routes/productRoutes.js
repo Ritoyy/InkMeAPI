@@ -17,8 +17,6 @@ router.post("/", upload.single("file"), async (req, res) => {
       lvl2_price,
       lvl3_price,
       color,
-      text,
-      text_color,
       category,
       id_design,
       file, // Store file (image or PDF)

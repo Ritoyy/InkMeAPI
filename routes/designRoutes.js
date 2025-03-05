@@ -16,6 +16,8 @@ router.post("/", upload.single("file"), async (req, res) => {
       name,
       isApproved: isApproved || false, // Default to false if not provided
       file,
+      text,
+      text_color,
     });
 
     // Save to database

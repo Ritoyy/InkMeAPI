@@ -11,7 +11,6 @@ router.post("/", upload.single("file"), async (req, res) => {
     const file = req.file ? req.file.filename : null; // Get uploaded file name
 
     const newProduct = new Product({
-      type,
       name,
       description,
       lvl1_price,

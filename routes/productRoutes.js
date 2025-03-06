@@ -18,7 +18,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       color,
       category,
       id_design,
-      image: file, // Store Cloudinary URL
+      file, // Store Cloudinary URL
     });
 
     await newProduct.save();

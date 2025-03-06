@@ -7,8 +7,8 @@ const productSchema = new mongoose.Schema({
   lvl2_price: Number,
   lvl3_price: Number,
   color: String,
-  category: String,
-  id_design: { type: mongoose.Schema.Types.ObjectId, ref: "Design" },
+  category: String ,
+  id_design: { type: mongoose.Schema.Types.ObjectId, ref: "Design" } || null,
   file: String, // Stores the image filename
 });
 

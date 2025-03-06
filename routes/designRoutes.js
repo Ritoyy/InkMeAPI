@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const { user_id, name, isApproved, text, text_color } = req.body;
+    const { user_id, name, isApproved, text, text_color, added_value, description } = req.body;
     const file = req.file ? req.file.path : null; // Cloudinary URL
 
     const newDesign = new Design({
@@ -15,7 +15,9 @@ router.post("/", upload.single("file"), async (req, res) => {
       isApproved: isApproved || false,
       file, // Store Cloudinary URL
       text,
-      text_color
+      text_color,
+      added_value,
+      description
     });
 
     await newDesign.save();

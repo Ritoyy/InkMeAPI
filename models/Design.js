@@ -7,6 +7,8 @@ const designSchema = new mongoose.Schema({
   file: String,
   text: String,
   text_color: String,
+  added_value: Number,
+  description: String
 });
 
 module.exports = mongoose.model("Design", designSchema);

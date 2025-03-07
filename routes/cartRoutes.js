@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
 // Get cart by user ID
 router.get("/:userId", async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user_id: req.params.userId }).populate("items.product_id");
+    const cart = await Cart.findOne({ user_id: req.params.userId }).populate("items.designedproduct_id");
     if (!cart) return res.status(404).json({ error: "Cart not found" });
     res.json(cart);
   } catch (error) {

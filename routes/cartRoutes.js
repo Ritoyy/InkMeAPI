@@ -48,7 +48,7 @@ router.put("/:cartId/remove", async (req, res) => {
     const cart = await Cart.findById(req.params.cartId);
     if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-    cart.items = cart.items.filter(item => item.product_id.toString() !== req.body.product_id);
+    cart.items = cart.items.filter(item => item.designedproduct_id.toString() !== req.body.designedproduct_id);
     await cart.save();
     res.json(cart);
   } catch (error) {

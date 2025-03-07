@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 // Get all orders
 router.get("/", async (req, res) => {
   try {
-    const orders = await Order.find().populate("user_id").populate("items.product_id");
+    const orders = await Order.find().populate("user_id").populate("items.designedproduct_id");
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
 // Get orders by user ID
 router.get("/user/:userId", async (req, res) => {
   try {
-    const orders = await Order.find({ user_id: req.params.userId }).populate("items.product_id");
+    const orders = await Order.find({ user_id: req.params.userId }).populate("items.designedproduct_id");
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -57,7 +57,7 @@ router.delete("/:orderId", async (req, res) => {
 // Get order by ID
 router.get("/:orderId", async (req, res) => {
     try {
-      const order = await Order.findById(req.params.orderId).populate("user_id").populate("items.product_id");
+      const order = await Order.findById(req.params.orderId).populate("user_id").populate("items.designedproduct_id");
       if (!order) return res.status(404).json({ error: "Order not found" });
       res.json(order);
     } catch (error) {

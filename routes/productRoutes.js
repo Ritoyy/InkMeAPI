@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const { name, description, lvl1_price, lvl2_price, lvl3_price, color, category, id_design } = req.body; 
+    const { name, description, lvl1_price, lvl2_price, lvl3_price, color, category } = req.body; 
     const file = req.file ? req.file.path : null; // Cloudinary URL
 
     const newProduct = new Product({
@@ -17,7 +17,6 @@ router.post("/", upload.single("file"), async (req, res) => {
       lvl3_price,
       color,
       category,
-      id_design,
       file, // Store Cloudinary URL
     });
 

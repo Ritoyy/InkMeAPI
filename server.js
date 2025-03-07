@@ -30,12 +30,14 @@ const designRoutes = require("./routes/designRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const DesignedProduct = require("./models/DesignedProduct");
 
 app.use("/api/users", userRoutes);
 app.use("/api/designs", designRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/designedproducts", DesignedProduct);
 
 // Serve uploaded images as static files
 app.use("/uploads", express.static("uploads"));

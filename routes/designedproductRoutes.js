@@ -1,60 +1,57 @@
 const express = require("express");
+const router = express.Router();
 const DesignedProduct = require("../models/DesignedProduct");
 
-const router = express.Router();
-
-// Create a new designed product
+// ✅ Create a new DesignedProduct
 router.post("/", async (req, res) => {
-    try {
-      const designedProduct = new DesignedProduct(req.body);
-      await designedProduct.save();
-      res.status(201).json(designedProduct);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+  try {
+    const { design_id, product_id } = req.body;
 
-  // Get a designed product by ID
-router.get("/:designedProductId", async (req, res) => {
-    try {
-      const designedProduct = await DesignedProduct.findById(req.params.designedProductId).populate("design_id").populate("product_id");
-      if (!designedProduct) return res.status(404).json({ error: "Designed product not found" });
-      res.json(designedProduct);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (!design_id || !product_id) {
+      return res.status(400).json({ error: "design_id and product_id are required" });
     }
-  });
 
-  // Update a designed product by ID
-router.put("/:designedProductId", async (req, res) => {
-    try {
-      const updatedDesignedProduct = await DesignedProduct.findByIdAndUpdate(req.params.designedProductId, req.body, { new: true });
-      if (!updatedDesignedProduct) return res.status(404).json({ error: "Designed product not found" });
-      res.json(updatedDesignedProduct);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+    const newDesignedProduct = new DesignedProduct({ design_id, product_id });
+    await newDesignedProduct.save();
 
-  // Delete a designed product by ID
-router.delete("/:designedProductId", async (req, res) => {
-    try {
-      const deletedDesignedProduct = await DesignedProduct.findByIdAndDelete(req.params.designedProductId);
-      if (!deletedDesignedProduct) return res.status(404).json({ error: "Designed product not found" });
-      res.json({ message: "Designed product deleted successfully" });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+    res.status(201).json(newDesignedProduct);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-// Get all designed products
+// ✅ Get all DesignedProducts
 router.get("/", async (req, res) => {
-    try {
-      const designedProducts = await DesignedProduct.find().populate("design_id").populate("product_id");
-      res.json(designedProducts);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+  try {
+    const designedProducts = await DesignedProduct.find().populate("design_id product_id");
+    res.json(designedProducts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ✅ Get a single DesignedProduct by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const designedProduct = await DesignedProduct.findById(req.params.id).populate("design_id product_id");
+    if (!designedProduct) return res.status(404).json({ error: "DesignedProduct not found" });
+
+    res.json(designedProduct);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ✅ Delete a DesignedProduct by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedDesignedProduct = await DesignedProduct.findByIdAndDelete(req.params.id);
+    if (!deletedDesignedProduct) return res.status(404).json({ error: "DesignedProduct not found" });
+
+    res.json({ message: "DesignedProduct deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;

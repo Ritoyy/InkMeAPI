@@ -4,7 +4,7 @@ const DesignedProduct = require("../models/DesignedProduct");
 
 router.post("/", async (req, res) => {
   try {
-    const { design_id, product_id } = req.body;
+    const { design_id, product_id, isPublic } = req.body;
 
     if (!design_id || !product_id) {
       return res.status(400).json({ error: "design_id and product_id are required" });

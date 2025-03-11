@@ -10,7 +10,11 @@ const DesignedProductSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product", // Reference to the Product model
     required: true,
-  }
+  },
+  isPublic: {
+    type: Boolean,
+    default: false,
+  },
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt
 
 module.exports = mongoose.model("DesignedProduct", DesignedProductSchema);

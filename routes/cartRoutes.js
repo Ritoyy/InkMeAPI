@@ -9,7 +9,17 @@ router.post("/", async (req, res) => {
     let cart = await Cart.findOne({ user_id: req.body.user_id });
 
     if (cart) {
-      cart.items.push(...req.body.items);
+      req.body.items.forEach(newItem => {
+        const existingItem = cart.items.find(item => 
+          item.designedproduct_id.toString() === newItem.designedproduct_id
+        );
+
+        if (existingItem) {
+          existingItem.amount += newItem.amount; // Update quantity
+        } else {
+          cart.items.push(newItem); // Add new item
+        }
+      });
     } else {
       cart = new Cart(req.body);
     }
@@ -20,6 +30,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Get cart by user ID
 router.get("/:userId", async (req, res) => {
@@ -35,20 +46,16 @@ router.get("/:userId", async (req, res) => {
 // Update cart (modify items)
 router.put("/:cartId", async (req, res) => {
   try {
-    const cart = await Cart.findByIdAndUpdate(req.params.cartId, req.body, { new: true });
-    res.json(cart);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Remove an item from cart
-router.put("/:cartId/remove", async (req, res) => {
-  try {
     const cart = await Cart.findById(req.params.cartId);
     if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-    cart.items = cart.items.filter(item => item.designedproduct_id.toString() !== req.body.designedproduct_id);
+    req.body.items.forEach(updatedItem => {
+      const item = cart.items.find(i => i.designedproduct_id.toString() === updatedItem.designedproduct_id);
+      if (item) {
+        item.amount = updatedItem.amount; // Only update amount
+      }
+    });
+
     await cart.save();
     res.json(cart);
   } catch (error) {
@@ -56,14 +63,34 @@ router.put("/:cartId/remove", async (req, res) => {
   }
 });
 
+
+// Remove an item from cart
+router.delete("/:cartId/item/:productId", async (req, res) => {
+  try {
+    const cart = await Cart.findById(req.params.cartId);
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+    cart.items = cart.items.filter(item => item.designedproduct_id.toString() !== req.params.productId);
+    await cart.save();
+
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 // Delete cart
 router.delete("/:cartId", async (req, res) => {
   try {
-    await Cart.findByIdAndDelete(req.params.cartId);
+    const cart = await Cart.findByIdAndDelete(req.params.cartId);
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
+
     res.json({ message: "Cart deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 module.exports = router;

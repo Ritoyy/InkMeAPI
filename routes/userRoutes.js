@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login
+ // Login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -29,7 +29,12 @@ router.post("/login", async (req, res) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-  const token = jwt.sign({ id: user._id, type_rol: user.type_rol }, process.env.JWT_SECRET, { expiresIn: "1d" });
+  // Incluir name y type_rol en el token JWT
+  const token = jwt.sign(
+    { id: user._id, name: user.name, type_rol: user.type_rol },
+    process.env.JWT_SECRET,  
+    { expiresIn: "1d" } 
+  );
   res.json({ token });
 });
 

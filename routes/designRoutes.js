@@ -27,6 +27,16 @@ router.post("/", upload.single("file"), async (req, res) => {
   }
 });
 
+//Get designs by user ID
+router.get("/user/:userId", async (req, res) => {
+    try {
+      const designs = await Design.find({ user_id: req.params.userId });
+      res.json(designs);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
 // Get all designs
 router.get("/", async (req, res) => {
     try {

@@ -76,4 +76,31 @@ router.put("/:id", async (req, res) => {
   });
   
 
+  router.get("/search", async (req, res) => {
+    try {
+      const { query } = req.query; // Extract search query from request
+  
+      if (!query) {
+        return res.status(400).json({ message: "Query parameter is required" });
+      }
+  
+      const designedProducts = await DesignedProduct.find()
+        .populate({
+          path: "design_id",
+          match: { name: { $regex: query, $options: "i" } }, // Case-insensitive search
+        })
+        .populate("product_id") // Populate product details if needed
+        .lean();
+  
+      // Filter out null design_id values (due to failed match)
+      const filteredProducts = designedProducts.filter(dp => dp.design_id);
+  
+      res.json(filteredProducts);
+    } catch (error) {
+      console.error("Error searching designs:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+  
+
 module.exports = router;

@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
 
     const newDesignedProduct = new DesignedProduct({ design_id, product_id });
     await newDesignedProduct.save();
-
+    console.log("newDesignedProduct", newDesignedProduct);
     res.status(201).json(newDesignedProduct);
   } catch (error) {
     res.status(500).json({ error: error.message });

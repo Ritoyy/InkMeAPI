@@ -13,7 +13,6 @@ const DesignedProductSchema = new mongoose.Schema({
   },
   isPublic: {
     type: Boolean,
-    default: false,
   },
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt
 

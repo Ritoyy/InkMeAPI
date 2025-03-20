@@ -10,9 +10,8 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "design_id and product_id are required" });
     }
 
-    const newDesignedProduct = new DesignedProduct({ design_id, product_id });
+    const newDesignedProduct = new DesignedProduct({ design_id, product_id, isPublic });
     await newDesignedProduct.save();
-    console.log("newDesignedProduct", newDesignedProduct);
     res.status(201).json(newDesignedProduct);
   } catch (error) {
     res.status(500).json({ error: error.message });
